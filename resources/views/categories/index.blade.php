@@ -1,0 +1,109 @@
+@extends('layouts.app')
+
+@section('content')
+    <div class="d-flex justify-content-end mb-2"> 
+       <a href="{{route('categories.create')}}" class="btn btn-primary"> Add Category</a>
+     </div>     
+			
+			
+                  	<div class="card card-default">
+			   <div class="card-header">
+			  <h1 class="text-center"> Categories</h1>
+			</div>
+			
+			<div class="card-body">
+			 @if($categories->count() > 0)
+			   <table class="table mytable">
+			      <thead>
+				     <tr>
+					  <th> Name</th>
+					  <th class=""> Post Counts</th>
+					  <th class=""> </th>
+					 </tr>
+				  </thead>
+				  
+				  <tbody>
+				   @foreach($categories as $category)
+				      <tr>
+					  <td> {{$category->name}}</td>
+					  
+					   <td> {{$category->posts->count()}}</td>
+					  <td> <a class="btn btn-info btn-sm" href="{{route('categories.edit',$category->id)}}">Edit</a>
+					     <button type="button" class="btn btn-danger btn-sm " onclick="handleDelete({{$category->id}})">
+							  delete
+							</button>
+					  </td>
+					 </tr>
+					 @endforeach
+					
+				  </tbody>
+				  
+			   </table>
+			   @else
+			   <h3 class="text-center text-bold"> {{'No records found'}} </h3>
+           @endif
+			</div>
+
+
+<!-- Modal -->
+
+
+			</div>
+         			
+	
+     <div class="modal" id="deleteModal" tabindex="-1">
+  <div class="modal-dialog">
+  <form action="" method="post" id="deleteCategoryForm">
+  @csrf
+  @method('DELETE')
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete category</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="text-center text-bold">Are you sure you want to delete this category?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No! Go back</button>
+        <button type="submit" class="btn btn-danger">Yes! Delete</button>
+      </div>
+    </div>
+	</form>
+  </div>
+</div>        
+	    
+@endsection
+
+
+
+
+
+@section('scripts')
+ <script>
+function handleDelete(id){
+	var form = document.getElementById("deleteCategoryForm");
+	form.action = '/categories/'+id;
+	
+	$('#deleteModal').modal('show');
+}
+</script>
+
+
+  <script src="{{ asset('assets/vendor/js-cookie/js.cookie.js') }}"></script>
+  <script src="{{ asset('assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js') }}"></script>
+  <script src="{{ asset('assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js') }}"></script>
+  <!-- Argon JS -->
+  <script src="{{ asset('assets/js/argon.js?v=1.2.0') }}"></script>
+ @endsection
+ 
+@section('css')
+    
+	<link rel="stylesheet" href="{{ asset('assets/vendor/nucleo/css/nucleo.css') }}" type="text/css">
+  <link rel="stylesheet" href="{{ asset('assets/vendor/@fortawesome/fontawesome-free/css/all.min.css') }}" type="text/css">
+  <!-- Argon CSS -->
+  <link rel="stylesheet" href="{{ asset('assets/css/argon.css?v=1.2.0') }}" type="text/css">
+  
+@endsection
